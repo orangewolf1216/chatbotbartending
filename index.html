@@ -1,0 +1,107 @@
+AIzaSyAUwfoWAbjCmrhiIo8BsXidMlQQCsS08ms
+
+
+curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=GEMINI_API_KEY" \
+-H 'Content-Type: application/json' \
+-X POST \
+-d '{
+  "contents": [{
+    "parts":[{"text": "Explain how AI works"}]
+    }]
+   }'
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>🍸 調酒介紹機器人</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background: #f8f0ea;
+    }
+    #chatbox {
+      border: 1px solid #ccc;
+      padding: 20px;
+      background: #fffdf9;
+      max-width: 700px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    #messages {
+      margin-bottom: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 8px 0;
+      white-space: pre-wrap;
+    }
+    .user {
+      color: #0077cc;
+      font-weight: bold;
+    }
+    .bot {
+      color: #d2691e;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <h2>🍹 調酒小幫手</h2>
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="輸入一款調酒，例如：Margarita、Martini" style="width: 70%;">
+    <button onclick="sendMessage()">送出</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const inputBox = document.getElementById("userInput");
+      const userText = inputBox.value.trim();
+      if (!userText) return;
+
+      appendMessage("你: " + userText, "user");
+      inputBox.value = "";
+
+      const apiKey = "AIzaSyAUwfoWAbjCmrhiIo8BsXidMlQQCsS08ms"; // 請妥善保護你的金鑰
+
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `請介紹這款調酒「${userText}」，包含它的材料、作法和歷史背景。`
+              }]
+            }]
+          })
+        }
+      );
+
+      const data = await res.json();
+      const botText = data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我找不到這款調酒的資訊。";
+      appendMessage("調酒小幫手: " + botText, "bot");
+    }
+
+    function appendMessage(text, sender) {
+      const messages = document.getElementById("messages");
+      const div = document.createElement("div");
+      div.className = `message ${sender}`;
+      div.innerText = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+  </script>
+</body>
+</html>
